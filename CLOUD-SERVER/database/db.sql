@@ -1,0 +1,40 @@
+CREATE DATABASE smarthome;
+
+CREATE TABLE users (
+  ID SERIAL PRIMARY KEY,
+  username VARCHAR(10) NOT NULL,
+  password VARCHAR(200) NOT NULL
+);
+
+INSERT INTO users (username,password)
+  VALUES ('aseemregmi','aseemregmi'),('namitadhikari', 'namitadhikari'),('niranjanpant','niranjanpant'),('skandaaryal','skandaaryal');
+
+CREATE TABLE raspberry_pi (
+  ID SERIAL PRIMARY KEY,
+  USER_ID INT NOT NULL,
+  FOREIGN KEY (USER_ID) REFERENCES users(ID)
+);
+
+CREATE TABLE gadget_type (
+  ID SERIAL PRIMARY KEY,
+  NAME VARCHAR(50)
+);
+
+CREATE TABLE gadgets (
+  ID SERIAL PRIMARY KEY,
+  PI_ID INT NOT NULL,
+  GADGET_TYPE_ID INT NOT NULL,
+  PIN_ID INT NOT NULL,
+  POWER INT NOT NULL,
+  STATUS BOOLEAN DEFAULT FALSE,
+  FOREIGN KEY (PI_ID) REFERENCES raspberry_pi(ID),
+  FOREIGN KEY (GADGET_TYPE_ID) REFERENCES gadget_type(ID)
+);
+
+CREATE TABLE scheduled_tasks (
+  GADGET_ID INT NOT NULL,
+  SCHEDULED_TIME TIMESTAMPTZ NOT NULL,
+  TASK_TO_DO BOOLEAN NOT NULL,
+  STATUS VARCHAR('20'),
+  FOREIGN KEY (GADGET_ID) REFERENCES gadgets(ID)
+);

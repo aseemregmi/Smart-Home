@@ -1,26 +1,20 @@
+// For environment Variables
 require('dotenv').config();
-const port = process.env.PORT || 3000;
-const express = require('express');
 
+// PORT Setup
+const port = process.env.PORT || 3000;
+
+// Libraries
+const express = require('express');
+const http = require('http');
+const socketInitFunction = require('./socket/socket');
+
+// Init Servers
 const app = express();
+const server = http.Server(app);
+socketInitFunction(server);
 
 // Importing routes
-const pi = require('./routes/api/pi');
+app.use('/apis/pi/', require('./routes/api/pi'));
 
-app.use('/apis/pi/', pi);
-
-app.listen(port, () => console.log(`Listening in PORT ${port}`));
-
-// For DB (Later task)
-// const { Pool } = require('pg');
-
-// const pool = new Pool();
-
-// (async () => {
-//   try {
-//     const res = await pool.query('SELECT * FROM users');
-//     console.log(res.rows[0]);
-//   } finally {
-//     pool.end();
-//   }
-// })().catch(e => console.log(e.stack));
+server.listen(port, () => console.log(`Listening in PORT ${port}`));

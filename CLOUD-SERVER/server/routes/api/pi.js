@@ -5,7 +5,7 @@ router.post('/on', (req, res) => {
 });
 
 router.post('off', (req, res) => {
-  res.send('PI TURNED ON');
+  res.send('PI TURNED OFF');
 });
 
 router.get('/', (req, res) => {

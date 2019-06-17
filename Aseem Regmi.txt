@@ -1,2 +1,9 @@
 Upto May 29, 2019
 - Designed Database
+
+June 3, 2019
+- Initialized REST Api Server and Socket Server
+
+June 17, 2019
+- Updated Database
+- Created API Endpoints for signup and login

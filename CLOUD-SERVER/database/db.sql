@@ -1,13 +1,12 @@
 CREATE DATABASE smarthome;
 
+\c smarthome;
+
 CREATE TABLE users (
   ID SERIAL PRIMARY KEY,
-  username VARCHAR(10) NOT NULL,
-  password VARCHAR(200) NOT NULL
+  username VARCHAR(25) UNIQUE NOT NULL,
+  password CHAR(64) NOT NULL
 );
-
-INSERT INTO users (username,password)
-  VALUES ('aseemregmi','aseemregmi'),('namitadhikari', 'namitadhikari'),('niranjanpant','niranjanpant'),('skandaaryal','skandaaryal');
 
 CREATE TABLE raspberry_pi (
   ID SERIAL PRIMARY KEY,
@@ -35,6 +34,20 @@ CREATE TABLE scheduled_tasks (
   GADGET_ID INT NOT NULL,
   SCHEDULED_TIME TIMESTAMPTZ NOT NULL,
   TASK_TO_DO BOOLEAN NOT NULL,
-  STATUS VARCHAR('20'),
+  STATUS VARCHAR(20),
   FOREIGN KEY (GADGET_ID) REFERENCES gadgets(ID)
 );
+
+CREATE TABLE session (
+  GADGET_ID INT NOT NULL,
+  STARTING_DATETIME TIMESTAMPTZ NOT NULL,
+  ENDING_TIME TIMESTAMPTZ,
+  FOREIGN KEY (GADGET_ID) REFERENCES gadgets(ID)
+);
+
+DROP TABLE session;
+DROP TABLE scheduled_tasks;
+DROP TABLE gadgets;
+DROP TABLE gadget_type;
+DROP TABLE raspberry_pi;
+DROP TABLE users;

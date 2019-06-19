@@ -14,6 +14,7 @@ router.post('/', async (req, res) => {
       message: 'PI Is Successfully Registered to The User'
     });
   } catch (err) {
+    console.log(err)
     res.status(400).send(err);
   }
 });

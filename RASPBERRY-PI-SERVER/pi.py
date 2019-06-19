@@ -11,13 +11,7 @@ def on_connect():
 @sio.on('hi')
 def on_message(data):
     led = LED(data['pin'])
-
-    while True:
-        led.on()
-        time.sleep(1)
-        led.off()
-        time.sleep(1)
-    
+    led.on()  
 
 @sio.on('disconnect')
 def on_disconnect():

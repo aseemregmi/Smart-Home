@@ -7,3 +7,4 @@ cloud-server/semver.cmd
 cloud-server/semver
 raspberry-pi-server/node_modules
 react-native-app/node_modules
+ExpoApp/exposmart/node_modules

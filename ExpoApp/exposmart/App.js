@@ -5,6 +5,10 @@ import DashBoard from "./src/screens/DashBoard";
 import { createSwitchNavigator, createAppContainer } from "react-navigation";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { loggedIn: false };
+  }
   render() {
     return (
       <View style={styles.container}>

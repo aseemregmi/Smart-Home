@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { createBottomTabNavigator, createAppContainer } from "react-navigation";
 import HomeControllerScreen from "./HomeControllerScreen";
 import PowerConsumptionScreen from "./PowerConsumptionScreen";
 import SettingScreen from "./SettingScreen";
 import Icons from "react-native-vector-icons/Ionicons";
+import ControlScreen from "./ControlScreen";
 
 class DashBoard extends Component {
   render() {
@@ -15,6 +16,7 @@ class DashBoard extends Component {
     );
   }
 }
+
 export default DashBoard;
 
 const AppTabNavigator = createBottomTabNavigator(
@@ -39,6 +41,15 @@ const AppTabNavigator = createBottomTabNavigator(
       }
     },
     third: {
+      screen: ControlScreen,
+      navigationOptions: {
+        tabBarLabel: "Control Panel",
+        tabBarIcon: ({ tintColor }) => (
+          <Icons name="ios-desktop" size={24} color={tintColor} />
+        )
+      }
+    },
+    forth: {
       screen: SettingScreen,
       navigationOptions: {
         tabBarLabel: "Settings",

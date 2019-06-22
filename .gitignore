@@ -1,3 +1,10 @@
 cloud-server/node_modules
+cloud-server/mime
+cloud-server/mime.cmd
+cloud-server/nodemon
+cloud-server/nodemon.cmd
+cloud-server/semver.cmd
+cloud-server/semver
 raspberry-pi-server/node_modules
 react-native-app/node_modules
+ExpoApp/exposmart/node_modules

@@ -1,3 +1,7 @@
 May 29, 2019
 - Generated App Files
 - Designed Buttons To Control Raspberry PI
+
+Jun 23, 2019
+-React Navigation Implemented,
+-Welcome Tutorial Screen Added

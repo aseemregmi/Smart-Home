@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, AsyncStorage } from "react-native";
 import { Container, Form, Input, Item, Button, Label } from "native-base";
 
 const tryEmail = "skandaaryal2055@gmail.com";
@@ -11,8 +11,9 @@ class LoginScreen extends Component {
     this.state = { email: "", password: "" };
   }
 
-  onButtonPress = () => {
+  onButtonPress = async () => {
     if (this.state.email === tryEmail && this.state.password === tryPassword) {
+      await AsyncStorage.setItem("LoggedIn", "1");
       this.props.navigation.navigate("DashBoard");
     } else {
       alert("Username or Password is incorrect");

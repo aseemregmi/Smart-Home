@@ -23,9 +23,9 @@ class WelcomeScreen extends Component {
       <View style={styles.container}>
         <Slider
           data={WelcomeData}
-          onSkipButtonPressed={() => {
+          onSkipButtonPressed={async () => {
             this.props.navigation.navigate("Login");
-            AsyncStorage.setItem("skipped", "1");
+            await AsyncStorage.setItem("skipped", "1");
           }}
         />
       </View>

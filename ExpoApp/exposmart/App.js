@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import LoginScreen from "./src/screens/LoginScreen";
 import DashBoard from "./src/screens/DashBoard";
 import { createSwitchNavigator, createAppContainer } from "react-navigation";
+import WelcomeScreen from "./src/screens/WelcomeScreen";
 
 class App extends Component {
   constructor(props) {
@@ -20,6 +21,9 @@ class App extends Component {
 export default App;
 
 const AppSwitchNavigator = createSwitchNavigator({
+  Welcome: {
+    screen: WelcomeScreen
+  },
   Login: {
     screen: LoginScreen
   },

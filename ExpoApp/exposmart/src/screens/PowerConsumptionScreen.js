@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import axios from "axios";
 
 class PowerConsumptionScreen extends Component {
   render() {

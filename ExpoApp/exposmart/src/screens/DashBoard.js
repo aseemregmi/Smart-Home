@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { View, StyleSheet } from "react-native";
+import { connect } from "react-redux";
 import {
   createBottomTabNavigator,
   createAppContainer,
@@ -14,6 +15,17 @@ import ControlScreen from "./ControlScreen";
 import SettingsParent from "./SettingsParent";
 
 class DashBoard extends Component {
+  componentDidMount() {
+    if (!this.props.login.loggedIn) {
+      this.props.navigation.navigate("Login");
+    }
+  }
+
+  componentDidUpdate() {
+    if (!this.props.login.loggedIn) {
+      this.props.navigation.navigate("Login");
+    }
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -23,7 +35,7 @@ class DashBoard extends Component {
   }
 }
 
-export default DashBoard;
+export default connect(state => ({ login: state.login }))(DashBoard);
 
 const AppTabNavigator = createMaterialBottomTabNavigator(
   {

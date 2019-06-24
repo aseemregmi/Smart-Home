@@ -1,24 +1,30 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Text, StyleSheet, AsyncStorage } from "react-native";
 import { Container, Form, Input, Item, Button, Label } from "native-base";
-
-const tryEmail = "";
-const tryPassword = "";
+import { Login } from "../Actions";
 
 class LoginScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = { email: "", password: "" };
+    this.state = { email: "aseemregmi", password: "password123" };
+
+    if (props.login.loggedIn) {
+      props.navigation.navigate("DashBoard");
+    }
   }
 
-  onButtonPress = async () => {
-    if (this.state.email === tryEmail && this.state.password === tryPassword) {
-      await AsyncStorage.setItem("LoggedIn", "1");
-      this.props.navigation.navigate("DashBoard");
-    } else {
-      alert("Username or Password is incorrect");
-    }
+  onButtonPress = () => {
+    const { email, password } = this.state;
+    this.props.Login(email, password);
   };
+
+  componentDidUpdate() {
+    if (this.props.login.loggedIn) {
+      console.log("Logged In");
+      this.props.navigation.navigate("DashBoard");
+    }
+  }
 
   render() {
     return (
@@ -29,6 +35,7 @@ class LoginScreen extends Component {
             <Input
               autoCorrect={false}
               autoCapitalize="none"
+              value={this.state.email}
               onChangeText={text => this.setState({ email: text })}
             />
           </Item>
@@ -38,6 +45,7 @@ class LoginScreen extends Component {
               autoCorrect={false}
               autoCapitalize="none"
               secureTextEntry={true}
+              value={this.state.password}
               onChangeText={text => this.setState({ password: text })}
             />
           </Item>
@@ -55,7 +63,12 @@ class LoginScreen extends Component {
     );
   }
 }
-export default LoginScreen;
+export default connect(
+  state => {
+    return { login: state.login };
+  },
+  { Login }
+)(LoginScreen);
 
 const styles = StyleSheet.create({
   container: {

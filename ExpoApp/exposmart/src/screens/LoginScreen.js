@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { Text, StyleSheet, AsyncStorage } from "react-native";
 import { Container, Form, Input, Item, Button, Label } from "native-base";
 
-const tryEmail = "skandaaryal2055@gmail.com";
-const tryPassword = "nepal";
+const tryEmail = "";
+const tryPassword = "";
 
 class LoginScreen extends Component {
   constructor(props) {

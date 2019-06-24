@@ -25,7 +25,6 @@ class WelcomeScreen extends Component {
           data={WelcomeData}
           onSkipButtonPressed={() => {
             this.props.navigation.navigate("Login");
-            AsyncStorage.setItem("skipped", "1");
           }}
         />
       </View>

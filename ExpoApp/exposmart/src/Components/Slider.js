@@ -13,7 +13,7 @@ import { Icon } from "react-native-elements";
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
 class Slider extends Component {
-  renderButton = (data, index) => {
+  renderButton = (data, index, color) => {
     if (index === 0) {
       return (
         <Button
@@ -28,7 +28,7 @@ class Slider extends Component {
         <Button
           title="I'm Ready"
           buttonStyle={{
-            backgroundColor: `data[${index}].color`,
+            backgroundColor: color,
             marginTop: 60
           }}
           onPress={this.props.onSkipButtonPressed}
@@ -50,7 +50,7 @@ class Slider extends Component {
             color="#355A3F"
             size={50}
           />
-          {this.renderButton(data, index)}
+          {this.renderButton(data, index, datum.color)}
         </View>
       );
     });

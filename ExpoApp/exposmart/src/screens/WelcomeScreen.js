@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, AsyncStorage } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
+import { connect } from "react-redux";
 import Slider from "../Components/Slider";
+import { Skipped } from "../Actions";
 
 const WelcomeData = [
   {
@@ -18,20 +20,41 @@ const WelcomeData = [
 ];
 
 class WelcomeScreen extends Component {
+  constructor(props) {
+    super(props);
+    if (props.skipped) {
+      props.navigation.navigate("Login");
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.skipped) {
+      this.props.navigation.navigate("Login");
+    }
+  }
+
   render() {
+    console.log("REnder ran");
     return (
       <View style={styles.container}>
         <Slider
           data={WelcomeData}
           onSkipButtonPressed={() => {
             this.props.navigation.navigate("Login");
+            this.props.Skipped();
           }}
         />
       </View>
     );
   }
 }
-export default WelcomeScreen;
+
+export default connect(
+  state => {
+    return { skipped: state.login.skipped };
+  },
+  { Skipped }
+)(WelcomeScreen);
 
 const styles = StyleSheet.create({
   container: {

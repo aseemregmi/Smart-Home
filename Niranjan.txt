@@ -1,5 +1,8 @@
-june 3,2019
+June 3,2019
 created branch name niranjan.
 
-june 5, 2019
+June 5, 2019
 created tab and switch navigation
+
+June 24,2019
+created settings screen

@@ -11,6 +11,7 @@ import PowerConsumptionScreen from "./PowerConsumptionScreen";
 import SettingScreen from "./SettingScreen";
 import Icons from "react-native-vector-icons/Ionicons";
 import ControlScreen from "./ControlScreen";
+import SettingsParent from "./SettingsParent";
 
 class DashBoard extends Component {
   render() {
@@ -49,7 +50,7 @@ const AppTabNavigator = createMaterialBottomTabNavigator(
       }
     },
     forth: {
-      screen: SettingScreen,
+      screen: SettingsParent,
       navigationOptions: {
         tabBarLabel: "Settings",
         tabBarIcon: () => <Icons name="ios-settings" size={24} />

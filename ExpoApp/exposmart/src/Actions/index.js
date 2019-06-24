@@ -10,7 +10,13 @@ export const Login = (username, password) => {
           password
         }
       );
-      dispatch({ type: "LOGIN", payload: { token: response.headers.token } });
+      dispatch({
+        type: "LOGIN",
+        payload: {
+          token: response.headers.token,
+          username: response.data.username
+        }
+      });
     } catch (err) {}
   };
 };

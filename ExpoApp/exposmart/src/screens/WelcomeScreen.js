@@ -34,7 +34,6 @@ class WelcomeScreen extends Component {
   }
 
   render() {
-    console.log("REnder ran");
     return (
       <View style={styles.container}>
         <Slider

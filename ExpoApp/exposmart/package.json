@@ -26,7 +26,8 @@
     "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
-    "babel-preset-expo": "^5.1.1"
+    "babel-preset-expo": "^5.1.1",
+    "redux-devtools-extension": "^2.13.8"
   },
   "private": true
 }

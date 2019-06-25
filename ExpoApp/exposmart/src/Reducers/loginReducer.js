@@ -5,7 +5,8 @@ export const LoginReducer = (
   state = {
     loggedIn: false,
     token: null,
-    skipped: false
+    skipped: false,
+    username: null
   },
   action
 ) => {
@@ -19,6 +20,7 @@ export const LoginReducer = (
       return {
         ...state,
         token: action.payload.token,
+        username: action.payload.username,
         loggedIn: true
       };
     default:

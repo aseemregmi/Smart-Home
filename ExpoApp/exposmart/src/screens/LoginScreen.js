@@ -21,7 +21,6 @@ class LoginScreen extends Component {
 
   componentDidUpdate() {
     if (this.props.login.loggedIn) {
-      console.log("Logged In");
       this.props.navigation.navigate("DashBoard");
     }
   }

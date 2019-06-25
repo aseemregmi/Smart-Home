@@ -13,3 +13,4 @@ Jun 24, 2019
 Jun 25, 2019
 -User can add their own device.
 -User can toggle their device on and off
+-Redux Implemented in above two tasks

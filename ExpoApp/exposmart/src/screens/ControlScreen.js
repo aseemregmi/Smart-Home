@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, Picker } from "react-native";
 import { connect } from "react-redux";
 import axios from "axios";
 import { Header, Input, Button } from "react-native-elements";
+import { deviceAdded } from "./../Actions";
 
 class ControlScreen extends Component {
   state = {
@@ -116,7 +117,26 @@ class ControlScreen extends Component {
                 power: this.state.power
               })
               .then(res => {
+                this.props.deviceAdded(this.props.username);
+                this.props.navigation.navigate("first");
                 alert("Device Added");
+                this.setState({
+                  selectedRpId: "default",
+                  selectedGadgetType: "default",
+                  gadgetName: "",
+                  gpioNo: null,
+                  power: null
+                });
+              })
+              .catch(err => {
+                alert("Network Connection Failed or Invalid Data");
+                this.setState({
+                  selectedRpId: "default",
+                  selectedGadgetType: "default",
+                  gadgetName: "",
+                  gpioNo: "",
+                  power: ""
+                });
               });
           }}
         />
@@ -131,7 +151,10 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(ControlScreen);
+export default connect(
+  mapStateToProps,
+  { deviceAdded }
+)(ControlScreen);
 
 const styles = StyleSheet.create({
   container: {

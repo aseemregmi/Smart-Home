@@ -6,3 +6,9 @@ created tab and switch navigation
 
 June 24,2019
 created settings screen
+
+June 25,2019
+Handled LOGOUT button
+
+June 28,2019
+Added charts for power consumption

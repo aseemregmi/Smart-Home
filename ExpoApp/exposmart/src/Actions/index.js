@@ -21,6 +21,12 @@ export const Login = (username, password) => {
   };
 };
 
+export const Logout = () => {
+  return {
+    type: "LOGOUT"
+  };
+};
+
 export const Skipped = () => {
   return async dispatch => {
     dispatch({

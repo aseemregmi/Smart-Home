@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { View, StyleSheet } from "react-native";
 import { Button, Avatar } from "react-native-elements";
+import { connect } from "react-redux";
+import { Logout } from "../Actions";
 
 class SettingScreen extends Component {
   render() {
@@ -26,8 +28,7 @@ class SettingScreen extends Component {
             paddingRight: 80
           }}
           onPress={() => {
-            // this.navigation.navigate("login");
-            console.log(this.props);
+            this.props.Logout();
           }}
         />
         <Button
@@ -48,7 +49,10 @@ class SettingScreen extends Component {
     );
   }
 }
-export default SettingScreen;
+export default connect(
+  null,
+  { Logout }
+)(SettingScreen);
 
 const styles = StyleSheet.create({
   container: {
@@ -63,30 +67,3 @@ const styles = StyleSheet.create({
     marginRight: 20
   }
 });
-
-// import React, { Component } from "react";
-// import { View, Text, StyleSheet } from "react-native";
-// import { Button } from "react-native-elements";
-
-// class SettingScreen extends Component {
-//   render() {
-//     return (
-//       <View style={styles.container}>
-//         <Text>SettingScreen</Text>
-//         <Button
-//           onPress={() => this.props.navigation.navigate("aboutUs")}
-//           title="press me"
-//         />
-//       </View>
-//     );
-//   }
-// }
-// export default SettingScreen;
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     alignItems: "center",
-//     justifyContent: "center"
-//   }
-// });

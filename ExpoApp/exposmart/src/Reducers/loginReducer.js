@@ -23,6 +23,12 @@ export const LoginReducer = (
         username: action.payload.username,
         loggedIn: true
       };
+    case "LOGOUT":
+      return {
+        ...state,
+        token: null,
+        loggedIn: false
+      };
     default:
       return state;
   }

@@ -26,5 +26,6 @@ app.use('/api/pi/', require('./routes/api/pi'));
 app.use('/api/users/', require('./routes/api/user'));
 app.use('/api/gadget_type/', require('./routes/api/gadgetType'));
 app.use('/api/gadget/', require('./routes/api/gadget'));
+app.use('/api/energy-consumed/', require('./routes/api/energyConsumed'));
 
 server.listen(port, () => console.log(`Listening in PORT ${port}`));

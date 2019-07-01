@@ -7,7 +7,7 @@ import { Login } from "../Actions";
 class LoginScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = { email: "aseemregmi", password: "password123" };
+    this.state = { email: "", password: "" };
 
     if (props.login.loggedIn) {
       props.navigation.navigate("DashBoard");

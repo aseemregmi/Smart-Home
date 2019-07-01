@@ -1,9 +1,20 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, Picker } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Picker,
+  Dimensions,
+  PanResponder
+} from "react-native";
 import { connect } from "react-redux";
 import axios from "axios";
 import { Header, Input, Button } from "react-native-elements";
 import { deviceAdded } from "./../Actions";
+
+const DEVICE_HEIGHT = Dimensions.get("window").height;
+const DEVICE_WIDTH = Dimensions.get("window").width;
+const SWIPE_THRESHOLD = 0.25 * DEVICE_WIDTH;
 
 class ControlScreen extends Component {
   state = {
@@ -15,14 +26,30 @@ class ControlScreen extends Component {
     gpioNo: null,
     power: null
   };
+
+  constructor(props) {
+    super(props);
+    const panResponder = PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderRelease: (event, gesture) => {
+        if (gesture.dx < -SWIPE_THRESHOLD) {
+          this.props.navigation.navigate("forth");
+        } else if (gesture.dx > SWIPE_THRESHOLD) {
+          this.props.navigation.navigate("second");
+        }
+      }
+    });
+    this.panResponder = panResponder;
+  }
+
   componentDidMount() {
     axios
-      .get(`http://192.168.100.10:3000/api/pi/${this.props.username}`)
+      .get(`http://192.168.1.83:3000/api/pi/${this.props.username}`)
       .then(res => this.setState({ pi: res.data }))
       .catch(err => console.log(err));
 
     axios
-      .get("http://192.168.100.10:3000/api/gadget_type")
+      .get("http://192.168.1.83:3000/api/gadget_type")
       .then(res => this.setState({ gadgetType: res.data }))
       .catch(err => console.log(err));
   }
@@ -82,64 +109,73 @@ class ControlScreen extends Component {
     }
     return (
       <View style={styles.container}>
-        <Header
-          centerComponent={{ text: "ADD GADGETS", style: { color: "#fff" } }}
-        />
-        {this.renderSelectPi()}
-        {this.renderSelectGadgetType()}
-        <Input
-          placeholder="Enter the name of your device"
-          style={{ width: "100%" }}
-          value={this.state.gadgetName}
-          onChangeText={text => this.setState({ gadgetName: text })}
-        />
-        <Input
-          placeholder="Enter the gpioNo of your device"
-          style={{ width: "100%" }}
-          value={this.state.gpioNo}
-          onChangeText={text => this.setState({ gpioNo: text })}
-        />
-        <Input
-          placeholder="Enter the power consumption of your device in watts"
-          style={{ width: "100%" }}
-          value={this.state.power}
-          onChangeText={text => this.setState({ power: text })}
-        />
-        <Button
-          title="Add Gadget"
-          onPress={() => {
-            axios
-              .post("http://192.168.100.10:3000/api/gadget", {
-                rpi_id: this.state.selectedRpId,
-                gadget_type_id: this.state.selectedGadgetType,
-                gadget_name: this.state.gadgetName,
-                gpio_number: this.state.gpioNo,
-                power: this.state.power
-              })
-              .then(res => {
-                this.props.deviceAdded(this.props.username);
-                this.props.navigation.navigate("first");
-                alert("Device Added");
-                this.setState({
-                  selectedRpId: "default",
-                  selectedGadgetType: "default",
-                  gadgetName: "",
-                  gpioNo: null,
-                  power: null
-                });
-              })
-              .catch(err => {
-                alert("Network Connection Failed or Invalid Data");
-                this.setState({
-                  selectedRpId: "default",
-                  selectedGadgetType: "default",
-                  gadgetName: "",
-                  gpioNo: "",
-                  power: ""
-                });
-              });
+        <View
+          style={{
+            height: DEVICE_HEIGHT,
+            width: DEVICE_WIDTH,
+            backgroundColor: "white"
           }}
-        />
+          {...this.panResponder.panHandlers}
+        >
+          <Header
+            centerComponent={{ text: "ADD GADGETS", style: { color: "#fff" } }}
+          />
+          {this.renderSelectPi()}
+          {this.renderSelectGadgetType()}
+          <Input
+            placeholder="Enter the name of your device"
+            style={{ width: "100%" }}
+            value={this.state.gadgetName}
+            onChangeText={text => this.setState({ gadgetName: text })}
+          />
+          <Input
+            placeholder="Enter the gpioNo of your device"
+            style={{ width: "100%" }}
+            value={this.state.gpioNo}
+            onChangeText={text => this.setState({ gpioNo: text })}
+          />
+          <Input
+            placeholder="Enter the power consumption of your device in watts"
+            style={{ width: "100%" }}
+            value={this.state.power}
+            onChangeText={text => this.setState({ power: text })}
+          />
+          <Button
+            title="Add Gadget"
+            onPress={() => {
+              axios
+                .post("http://192.168.1.83:3000/api/gadget", {
+                  rpi_id: this.state.selectedRpId,
+                  gadget_type_id: this.state.selectedGadgetType,
+                  gadget_name: this.state.gadgetName,
+                  gpio_number: this.state.gpioNo,
+                  power: this.state.power
+                })
+                .then(res => {
+                  this.props.deviceAdded(this.props.username);
+                  this.props.navigation.navigate("first");
+                  alert("Device Added");
+                  this.setState({
+                    selectedRpId: "default",
+                    selectedGadgetType: "default",
+                    gadgetName: "",
+                    gpioNo: null,
+                    power: null
+                  });
+                })
+                .catch(err => {
+                  alert("Network Connection Failed or Invalid Data");
+                  this.setState({
+                    selectedRpId: "default",
+                    selectedGadgetType: "default",
+                    gadgetName: "",
+                    gpioNo: "",
+                    power: ""
+                  });
+                });
+            }}
+          />
+        </View>
       </View>
     );
   }

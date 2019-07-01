@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { View, Text, Picker, Button } from 'react-native';
-import DateTimePicker from 'react-native-modal-datetime-picker';
-import { PieChart } from 'react-native-svg-charts';
-import axios from 'axios';
+import React, { Component } from "react";
+import { View, Text, Button } from "react-native";
+import DateTimePicker from "react-native-modal-datetime-picker";
+import { PieChart } from "react-native-svg-charts";
+import axios from "axios";
 
 class Charts extends Component {
   state = {
@@ -39,23 +39,24 @@ class Charts extends Component {
   handleDateTimeSubmit = () => {
     const { startDate, endDate } = this.state;
     if (startDate === null || endDate === null) {
-      alert('Select Start And End Date Properly');
+      alert("Select Start And End Date Properly");
       return null;
     }
     axios
-      .get(`http://192.168.100.10:3000/api/energy-consumed/aseemregmi`, {
-        params: {
-          starting_datetime: new Date(startDate).toUTCString(),
-          ending_datetime: new Date(endDate).toUTCString()
+      .get(
+        `http://192.168.1.83:3000/api/energy-consumed/${this.props.username}`,
+        {
+          params: {
+            starting_datetime: new Date(startDate).toUTCString(),
+            ending_datetime: new Date(endDate).toUTCString()
+          }
         }
-      })
+      )
       .then(res => {
-        // console.log(res.data);
         this.handleRawDataGadgetWise(res.data);
       })
       .catch(err => {
-        console.log(err);
-        alert('Error Occurred');
+        alert("Error Occurred");
       });
   };
 
@@ -71,8 +72,6 @@ class Charts extends Component {
       }
     });
 
-    // GadgetWiseData
-    // GadgetWiseTime
     let gadgetWiseUnitsConsumption = new Object();
     Object.keys(gadgetWiseData).map(key => {
       const arrayOfGadgetData = gadgetWiseData[key];
@@ -103,9 +102,9 @@ class Charts extends Component {
           key: `pie-${name + value}`,
           svg: {
             fill: (
-              '#' +
+              "#" +
               ((Math.random() * 0xffffff) << 0).toString(16) +
-              '000000'
+              "000000"
             ).slice(0, 7),
             onPress: () => {
               alert(
@@ -125,13 +124,13 @@ class Charts extends Component {
   render() {
     // }
     return (
-      <View>
+      <View style={{ flex: 1 }}>
         <View>
           <Button
             title={
               this.state.startDate
                 ? this.state.startDate.toLocaleString()
-                : 'Select Start DateTime'
+                : "Select Start DateTime"
             }
             onPress={this.showStartDateTimePicker}
           />
@@ -147,7 +146,7 @@ class Charts extends Component {
             title={
               this.state.endDate
                 ? this.state.endDate.toLocaleString()
-                : 'Select End DateTime'
+                : "Select End DateTime"
             }
             onPress={this.showEndDatePicker}
           />

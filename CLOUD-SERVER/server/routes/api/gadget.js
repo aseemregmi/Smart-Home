@@ -65,6 +65,13 @@ router.post('/on', async (req, res) => {
     )).rows[0];
 
     const { socket_id } = raspberryInfo;
+    if (!socket_id) {
+      throw {
+        statusId: 400,
+        message: 'Raspberry PI is not currently active'
+      };
+    }
+
     const gadgetInfo = (await pool.query(
       `
       SELECT gpio_number, power, status FROM gadget
@@ -75,6 +82,7 @@ router.post('/on', async (req, res) => {
     if (gadgetInfo.status) {
       throw { statusId: 400, message: 'Device is already turned on' };
     }
+
     await pool.query(
       `
       UPDATE gadget
@@ -83,7 +91,6 @@ router.post('/on', async (req, res) => {
       `
     );
 
-    // TODO
     // Start a session for that gadget
     await pool.query(
       `
@@ -119,6 +126,12 @@ router.post('/off', async (req, res) => {
     )).rows[0];
 
     const { socket_id } = raspberryInfo;
+    if (!socket_id) {
+      throw {
+        statusId: 400,
+        message: 'Raspberry PI is not currently active'
+      };
+    }
     const gadgetInfo = (await pool.query(
       `
       SELECT gpio_number, power, status FROM gadget
@@ -154,8 +167,7 @@ router.post('/off', async (req, res) => {
       msg: 'Device is turned off'
     });
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ message: err.message || err });
+    res.status(err.statusId || 400).json({ message: err.message || err });
   }
 });
 

@@ -37,7 +37,6 @@ CREATE TABLE scheduled_tasks (
   gadget_id INT NOT NULL,
   SCHEDULED_TIME TIMESTAMPTZ NOT NULL,
   TASK_TO_DO BOOLEAN NOT NULL,
-  STATUS VARCHAR(20),
   FOREIGN KEY (gadget_id) REFERENCES gadget(gadget_id)
 );
 

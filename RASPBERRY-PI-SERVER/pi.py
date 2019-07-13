@@ -3,7 +3,7 @@ from gpiozero import LED, LEDBoard
 import time
 
 sio = socketio.Client()
-leds = LEDBoard(18, 4, 16)
+leds = LEDBoard(18, 4, 16, 23)
 
 rpi_id = 1
 

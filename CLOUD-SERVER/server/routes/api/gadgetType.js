@@ -19,4 +19,17 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.get('/', async (req, res) => {
+  try {
+    const { rows } = await pool.query(
+      `
+      SELECT * FROM gadget_type
+      `
+    );
+    res.json(rows);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 module.exports = router;

@@ -14,7 +14,6 @@ router.post('/', async (req, res) => {
       message: 'PI Is Successfully Registered to The User'
     });
   } catch (err) {
-    console.log(err)
     res.status(400).send(err);
   }
 });
@@ -31,7 +30,7 @@ router.get('/:username', async (req, res) => {
         WHERE username='${username}'
       `
     );
-    res.json({ pis: rows });
+    res.json(rows);
   } catch (err) {
     console.log(err);
     res.status(400).send(err);

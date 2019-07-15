@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
     data = {
       gpio: gadgetInfo.gpio_number,
       action,
-      datetime: new Date(datetime).getTime()
+      datetime
     };
 
     schedule(socket_id, data);

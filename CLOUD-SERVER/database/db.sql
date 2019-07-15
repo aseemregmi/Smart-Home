@@ -43,8 +43,8 @@ CREATE TABLE scheduled_tasks (
 
 CREATE TABLE session (
   gadget_id INT NOT NULL,
-  starting_datetime TIMESTAMP NOT NULL,
-  ending_datetime TIMESTAMP,
+  starting_datetime TIMESTAMPTZ NOT NULL,
+  ending_datetime TIMESTAMPTZ,
   FOREIGN KEY (gadget_id) REFERENCES gadget(gadget_id)
 );
 

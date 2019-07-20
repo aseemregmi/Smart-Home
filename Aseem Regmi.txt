@@ -16,3 +16,18 @@ June 18, 2019
 June 21, 2019
 - Updated gadget APIs
 - Wrote database queries to get all gadgets of a user and updated database on turning on and off of a gadget
+
+June 28, 2019
+- Created routes for energy consumption
+- Created gadget session
+
+July 12, 2019
+- Updated Database
+- Created API to schedule task
+- Updated APIs to work only if raspberry pi is connected
+- Finalized Socket Server
+
+July 20, 2019
+- Updated Database (scheduled_tasks)
+- Stored scheduled tasks in Database
+- Handled schedule socket response from PI

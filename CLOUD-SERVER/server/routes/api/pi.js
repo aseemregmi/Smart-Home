@@ -30,7 +30,7 @@ router.get('/:username', async (req, res) => {
         WHERE username='${username}'
       `
     );
-    res.json({ pis: rows });
+    res.json(rows);
   } catch (err) {
     console.log(err);
     res.status(400).send(err);

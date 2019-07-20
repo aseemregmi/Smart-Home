@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
     data = {
       gpio: gadgetInfo.gpio_number,
       action,
-      datetime
+      datetime: parseInt(datetime) / 1000
     };
 
     schedule(socket_id, data);

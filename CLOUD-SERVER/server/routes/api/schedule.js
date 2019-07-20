@@ -27,6 +27,14 @@ router.post('/', async (req, res) => {
       `
     )).rows[0];
 
+    // Update DB
+    await pool.query(
+      `
+    INSERT INTO scheduled_tasks(gadget_id, datetime, action)
+      VALUES('${gadget_id}', '${new Date(datetime).toUTCString()}', ${action})
+    `
+    );
+
     data = {
       gpio: gadgetInfo.gpio_number,
       action,
@@ -36,7 +44,9 @@ router.post('/', async (req, res) => {
     schedule(socket_id, data);
 
     res.json({
-      msg: 'Device is turned on'
+      msg: `Device is scheduled to be turned ${
+        action ? 'on' : 'off'
+      } on ${new Date(datetime).toLocaleString()}`
     });
   } catch (err) {
     res.status(err.statusId || 400).json({ error: err.message });

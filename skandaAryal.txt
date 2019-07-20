@@ -1,3 +1,19 @@
 May 29, 2019
 - Generated App Files
 - Designed Buttons To Control Raspberry PI
+
+Jun 23, 2019
+-React Navigation Implemented,
+-Welcome Tutorial Screen Added
+
+Jun 24, 2019
+-Setup redux
+-Handled Authentication
+
+Jun 25, 2019
+-User can add their own device.
+-User can toggle their device on and off
+-Redux Implemented in above two tasks
+
+July 1,2019
+-Gesture Added So that we can swipe for navigation

@@ -28,10 +28,13 @@ const socketInitFunction = server => {
       `);
 
       // If available get state from cache and emit to the pi
-      socket.emit(
-        'earlierState',
-        statusOfPiBeforeBeingDisconnected[data.rpi_id]
-      );
+
+      if (statusOfPiBeforeBeingDisconnected[data.rpi_id]) {
+        socket.emit(
+          'earlierState',
+          statusOfPiBeforeBeingDisconnected[data.rpi_id]
+        );
+      }
 
       // Start corresponding sessions again
       if (statusOfPiBeforeBeingDisconnected[data.rpi_id]) {
@@ -116,6 +119,75 @@ const socketInitFunction = server => {
             `
         );
       });
+    });
+
+    socket.on('scheduleOn', async data => {
+      try {
+        const { gadget_id } = data;
+        // Update DB
+        const gadgetInfo = (await pool.query(
+          `
+          SELECT gpio_number, power, status FROM gadget
+            WHERE gadget_id='${gadget_id}'
+          `
+        )).rows[0];
+
+        if (gadgetInfo.status) {
+          // It is already on DO NOTHING
+          throw {};
+        }
+        // Update gadgetStatus and start the session
+        await pool.query(
+          `
+            UPDATE gadget
+              SET status=${true}
+              WHERE gadget_id='${gadget_id}'
+            `
+        );
+
+        // Start a session
+        await pool.query(
+          `
+            INSERT INTO session (gadget_id, starting_datetime)
+              VALUES ('${gadget_id}', '${new Date().toUTCString()}')
+            `
+        );
+      } catch (err) {}
+    });
+
+    socket.on('scheduleOff', async data => {
+      try {
+        const { gadget_id } = data;
+
+        const gadgetInfo = (await pool.query(
+          `
+          SELECT gpio_number, power, status FROM gadget
+            WHERE gadget_id='${gadget_id}'
+          `
+        )).rows[0];
+
+        if (!gadgetInfo.status) {
+          // DO NORHING GADGET is already OFF
+          throw {};
+        }
+        // Update DB
+        await pool.query(
+          `
+            UPDATE gadget
+              SET status=${false}
+              WHERE gadget_id='${gadget_id}'
+            `
+        );
+
+        // Close the session
+        await pool.query(
+          `
+            UPDATE session
+              SET ending_datetime='${new Date().toUTCString()}'
+              WHERE gadget_id='${gadget_id}' and ending_datetime IS NULL
+            `
+        );
+      } catch (err) {}
     });
   });
 

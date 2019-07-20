@@ -1,3 +1,4 @@
+
 CLOUD-SERVER/node_modules
 CLOUD-SERVER/mime
 CLOUD-SERVER/mime.cmd
@@ -6,6 +7,7 @@ CLOUD-SERVER/nodemon.cmd
 CLOUD-SERVER/semver.cmd
 CLOUD-SERVER/semver
 RASPBERRY-PI-SERVER/node_modules
+ExpoApp/exposmart/node_modules
 REACT-NATIVE-APP/node_modules
 adminPanel/lib
 adminPanel/bin

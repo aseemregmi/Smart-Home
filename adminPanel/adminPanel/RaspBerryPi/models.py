@@ -8,7 +8,6 @@
 from django.db import models
 import hashlib
 
-
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)
 
@@ -145,8 +144,7 @@ class GadgetType(models.Model):
         db_table = 'gadget_type'
 
     def __str__(self):
-        return(self.gadget_type_name)
-
+        return (self.gadget_type_name)
 
 class RaspberryPi(models.Model):
     rpi_id = models.AutoField(primary_key=True)
@@ -159,14 +157,12 @@ class RaspberryPi(models.Model):
         db_table = 'raspberry_pi'
 
     def __str__(self):
-        return(self.rpi_name)
-
+        return self.rpi_name
 
 class ScheduledTasks(models.Model):
     gadget = models.ForeignKey(Gadget, models.DO_NOTHING)
-    scheduled_time = models.DateTimeField()
-    task_to_do = models.BooleanField()
-    status = models.CharField(max_length=20, blank=True, null=True)
+    datetime = models.DateTimeField()
+    action = models.BooleanField()
 
     class Meta:
         managed = False
@@ -186,12 +182,12 @@ class Session(models.Model):
 class Users(models.Model):
     user_id = models.AutoField(primary_key=True)
     username = models.CharField(unique=True, max_length=25)
-    password = models.CharField(max_length=256)
+    password = models.CharField(max_length=64)
 
     class Meta:
         managed = False
         db_table = 'users'
-        verbose_name_plural = "Users"
+        verbose_name_plural = 'Users'
 
     def __str__(self):
         return (self.username)

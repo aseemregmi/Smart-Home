@@ -15,3 +15,5 @@ adminPanel/Include
 adminPanel/Scripts
 adminPanel/tcl
 adminPanel/adminpanel/db.sqlite3
+adminPanel/adminPanel/RaspBerryPi/migrations
+adminPanel/adminPanel/RaspBerryPi/__pycache__

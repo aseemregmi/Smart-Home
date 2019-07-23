@@ -6,8 +6,8 @@ sio = socketio.Client()
 
 
 def gpio_init(pin):
-    gpio.setmode(gpio.BCM)
-    gpio.setup(pin, gpio.OUT)
+        gpio.setmode(gpio.BCM)
+        gpio.setup(pin, gpio.OUT)
 
 
 rpi_id = 1
@@ -59,15 +59,17 @@ def on_schedule(data):
         while True:
                 if (int(time.time()) == int(data['datetime']) ):
                         print("Checking time")
-                        if (data['action'] == "true"):
+                        if (data['action']):
+                                print("Scheduling on")
                                 gpio.output(data['gpio'], gpio.HIGH)
 
-                                sio.emit('scheduleOn',{"gadget_id":data['gadget_id']})
+                                sio.emit('scheduleOn',{"gadget_id":data['gadget_id'], "schedule_id":data['schedule_id']})
                                 break
                         else:
+                                print("Scheduling Off")
                                 gpio.output(data['gpio'], gpio.LOW)
 
-                                sio.emit('scheduleOff',{"gadget_id":data['gadget_id']})
+                                sio.emit('scheduleOff',{"gadget_id":data['gadget_id'], "schedule_id":data['schedule_id']})
                                 break
 
 @sio.on('disconnect')
@@ -75,5 +77,6 @@ def on_disconnect():
         print('Disconnected')
         gpio.cleanup()
 
-sio.connect('http://192.168.1.5:3000/')
+sio.connect('http://192.168.1.83:3000/')
+
 

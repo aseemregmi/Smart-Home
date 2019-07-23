@@ -21,4 +21,6 @@ export const store = createStore(
   composeWithDevTools(applyMiddleware(...middlewares))
 );
 
+// persistStore(store).purge();
+
 export const persistor = persistStore(store);

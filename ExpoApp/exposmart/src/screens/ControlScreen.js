@@ -17,6 +17,10 @@ const DEVICE_WIDTH = Dimensions.get("window").width;
 const SWIPE_THRESHOLD = 0.25 * DEVICE_WIDTH;
 
 class ControlScreen extends Component {
+  static navigationOptions = {
+    header: null
+  };
+
   state = {
     pi: null,
     selectedRpId: "default",
@@ -33,9 +37,9 @@ class ControlScreen extends Component {
       onStartShouldSetPanResponder: () => true,
       onPanResponderRelease: (event, gesture) => {
         if (gesture.dx < -SWIPE_THRESHOLD) {
-          this.props.navigation.navigate("forth");
+          this.props.screenProps.letsnavigate("forth");
         } else if (gesture.dx > SWIPE_THRESHOLD) {
-          this.props.navigation.navigate("second");
+          this.props.screenProps.letsnavigate("second");
         }
       }
     });
@@ -175,6 +179,12 @@ class ControlScreen extends Component {
                 });
             }}
           />
+          <View style={{ marginTop: 30 }}>
+            <Button
+              title="Schedule Devices"
+              onPress={() => this.props.navigation.navigate("schedule")}
+            />
+          </View>
         </View>
       </View>
     );

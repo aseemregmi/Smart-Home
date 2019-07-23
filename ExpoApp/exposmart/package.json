@@ -10,7 +10,9 @@
   "dependencies": {
     "axios": "^0.19.0",
     "expo": "^33.0.0",
+    "install": "^0.13.0",
     "native-base": "^2.12.1",
+    "npm": "^6.10.1",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",

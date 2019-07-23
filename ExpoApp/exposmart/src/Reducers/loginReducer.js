@@ -3,7 +3,7 @@ import { AsyncStorage } from "react-native";
 AsyncStorage.clear();
 export const LoginReducer = (
   state = {
-    loggedIn: true,
+    loggedIn: false,
     token: null,
     skipped: false,
     username: null

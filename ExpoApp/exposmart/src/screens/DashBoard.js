@@ -13,6 +13,7 @@ import SettingScreen from "./SettingScreen";
 import Icons from "react-native-vector-icons/Ionicons";
 import ControlScreen from "./ControlScreen";
 import SettingsParent from "./SettingsParent";
+import ScheduleParent from "./ScheduleParent";
 
 class DashBoard extends Component {
   componentDidMount() {
@@ -55,7 +56,7 @@ const AppTabNavigator = createMaterialBottomTabNavigator(
       }
     },
     third: {
-      screen: ControlScreen,
+      screen: ScheduleParent,
       navigationOptions: {
         tabBarLabel: "Control Panel",
         tabBarIcon: () => <Icons name="ios-desktop" size={24} />

@@ -23,6 +23,7 @@ router.post('/', async (req, res) => {
 
 // Public Route For Login
 router.post('/login', async (req, res) => {
+  console.log('Git it');
   try {
     const { username, password } = req.body;
     const hashedPassword = sha256(password);

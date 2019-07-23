@@ -28,17 +28,20 @@ router.post('/', async (req, res) => {
     )).rows[0];
 
     // Update DB
-    await pool.query(
+    const scheduledData = await pool.query(
       `
-    INSERT INTO scheduled_tasks(gadget_id, datetime, action)
-      VALUES('${gadget_id}', '${new Date(datetime).toUTCString()}', ${action})
-    `
+      INSERT INTO scheduled_tasks(gadget_id, datetime, action)
+        VALUES('${gadget_id}', '${parseInt(datetime) /
+        1000}', ${action}) RETURNING schedule_id
+      `
     );
 
     data = {
       gpio: gadgetInfo.gpio_number,
       action,
-      datetime: parseInt(datetime) / 1000
+      datetime: parseInt(datetime) / 1000,
+      schedule_id: scheduledData.rows[0].schedule_id,
+      gadget_id
     };
 
     schedule(socket_id, data);

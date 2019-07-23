@@ -20,7 +20,9 @@ const socketInitFunction = server => {
   io = socketServer;
 
   socketServer.on('connection', socket => {
+    console.log('Connected');
     socket.on('init', async data => {
+      console.log('PI DATA', data);
       await pool.query(`
       UPDATE raspberry_pi
         SET socket_id='${socket.id}'
@@ -28,16 +30,13 @@ const socketInitFunction = server => {
       `);
 
       // If available get state from cache and emit to the pi
-
       if (statusOfPiBeforeBeingDisconnected[data.rpi_id]) {
         socket.emit(
           'earlierState',
           statusOfPiBeforeBeingDisconnected[data.rpi_id]
         );
-      }
 
-      // Start corresponding sessions again
-      if (statusOfPiBeforeBeingDisconnected[data.rpi_id]) {
+        // Start corresponding sessions again
         statusOfPiBeforeBeingDisconnected[data.rpi_id].map(async gadgetInfo => {
           if (gadgetInfo.status) {
             // Update in DB The Status
@@ -60,7 +59,63 @@ const socketInitFunction = server => {
             );
           }
         });
+      } else {
+        // Get All Gadgets Connected To That Device
+        const gadgetConnectedToDisconnectedPi = (await pool.query(
+          `
+          SELECT gadget_id, status, gpio_number as gpio
+          FROM gadget
+            WHERE rpi_id='${data.rpi_id}'
+          `
+        )).rows;
+
+        socket.emit('earlierState', gadgetConnectedToDisconnectedPi);
+
+        // Start corresponding sessions again
+        gadgetConnectedToDisconnectedPi.map(async gadgetInfo => {
+          if (gadgetInfo.status) {
+            // Update in DB The Status
+            await pool.query(
+              `
+              UPDATE gadget
+                SET status=${true}
+                WHERE gadget_id='${gadgetInfo.gadget_id}'
+              `
+            );
+
+            // Start a session for the gadget which needs to be turned on
+            await pool.query(
+              `
+              INSERT INTO session (gadget_id, starting_datetime)
+                VALUES ('${
+                  gadgetInfo.gadget_id
+                }', '${new Date().toUTCString()}')
+            `
+            );
+          }
+        });
       }
+
+      // Send scheduled info
+      const scheduledDataInfo = (await pool.query(
+        `SELECT * FROM scheduled_tasks NATURAL JOIN gadget WHERE isScheduledActionCompleted=false AND rpi_id='${
+          data.rpi_id
+        }'
+        `
+      )).rows;
+
+      scheduledDataInfo.map(eachSchedule => {
+        console.log(eachSchedule.datetime);
+        console.log(new Date(eachSchedule.datetime).getTime());
+        console.log(new Date().getTime());
+        io.to(socket.id).emit('schedule', {
+          gpio: eachSchedule.gpio_number,
+          action: eachSchedule.action,
+          datetime: eachSchedule.datetime,
+          gadget_id: eachSchedule.gadget_id,
+          schedule_id: eachSchedule.schedule_id
+        });
+      });
 
       // Remove Cache
       statusOfPiBeforeBeingDisconnected[data.rpi_id] = null;
@@ -122,20 +177,11 @@ const socketInitFunction = server => {
     });
 
     socket.on('scheduleOn', async data => {
+      console.log('Got schedule On');
+      console.log(data);
       try {
-        const { gadget_id } = data;
-        // Update DB
-        const gadgetInfo = (await pool.query(
-          `
-          SELECT gpio_number, power, status FROM gadget
-            WHERE gadget_id='${gadget_id}'
-          `
-        )).rows[0];
+        const { gadget_id, schedule_id } = data;
 
-        if (gadgetInfo.status) {
-          // It is already on DO NOTHING
-          throw {};
-        }
         // Update gadgetStatus and start the session
         await pool.query(
           `
@@ -152,24 +198,28 @@ const socketInitFunction = server => {
               VALUES ('${gadget_id}', '${new Date().toUTCString()}')
             `
         );
-      } catch (err) {}
+
+        // Update scheduled_tasks saying it was completed
+        await pool.query(
+          `
+          UPDATE scheduled_tasks
+            SET isScheduledActionCompleted=${true}
+            WHERE schedule_id='${schedule_id}'
+          `
+        );
+      } catch (err) {
+        console.log('Schedule On Error');
+        console.log(err);
+      }
     });
 
     socket.on('scheduleOff', async data => {
+      console.log('Got Schedule Off');
+      console.log(data);
+
       try {
-        const { gadget_id } = data;
+        const { gadget_id, schedule_id } = data;
 
-        const gadgetInfo = (await pool.query(
-          `
-          SELECT gpio_number, power, status FROM gadget
-            WHERE gadget_id='${gadget_id}'
-          `
-        )).rows[0];
-
-        if (!gadgetInfo.status) {
-          // DO NORHING GADGET is already OFF
-          throw {};
-        }
         // Update DB
         await pool.query(
           `
@@ -187,7 +237,19 @@ const socketInitFunction = server => {
               WHERE gadget_id='${gadget_id}' and ending_datetime IS NULL
             `
         );
-      } catch (err) {}
+
+        // Update scheduled_tasks saying it was completed
+        await pool.query(
+          `
+          UPDATE scheduled_tasks
+            SET isScheduledActionCompleted=${true}
+            WHERE schedule_id='${schedule_id}'
+          `
+        );
+      } catch (err) {
+        console.log('Schedule Off Error');
+        console.log(err);
+      }
     });
   });
 

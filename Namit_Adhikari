@@ -1,1 +1,6 @@
+Upto June 4, 2019
+- Created simple on/off system in Raspberry PI
+- Established simple connection between cloud server and Raspberry PI
 
+Upto June 28, 2019
+- Created Admin Panel to co-ordinate the Raspberry Pis, Users, Gadgets and Gadget Types using Django Framework.

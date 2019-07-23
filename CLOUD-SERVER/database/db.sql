@@ -35,16 +35,15 @@ CREATE TABLE gadget (
 
 CREATE TABLE scheduled_tasks (
   gadget_id INT NOT NULL,
-  SCHEDULED_TIME TIMESTAMPTZ NOT NULL,
-  TASK_TO_DO BOOLEAN NOT NULL,
-  STATUS VARCHAR(20),
+  datetime TIMESTAMP NOT NULL,
+  action BOOLEAN NOT NULL,
   FOREIGN KEY (gadget_id) REFERENCES gadget(gadget_id)
 );
 
 CREATE TABLE session (
   gadget_id INT NOT NULL,
-  starting_datetime TIMESTAMPTZ NOT NULL,
-  ending_datetime TIMESTAMPTZ,
+  starting_datetime TIMESTAMP NOT NULL,
+  ending_datetime TIMESTAMP,
   FOREIGN KEY (gadget_id) REFERENCES gadget(gadget_id)
 );
 

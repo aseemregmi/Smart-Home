@@ -41,12 +41,12 @@ router.get('/:username', async (req, res) => {
 
     const data = (await pool.query(
       `
-      SELECT gadget_id, gadget_name, gpio_number, status
+      SELECT gadget_id, gadget_name, gpio_number, status, rpi_id
         FROM gadget NATURAL JOIN raspberry_pi
         WHERE user_id='${user_id}'
       `
     )).rows;
-    res.json({ data });
+    res.json(data);
   } catch (err) {
     res.send(err);
   }
@@ -65,6 +65,13 @@ router.post('/on', async (req, res) => {
     )).rows[0];
 
     const { socket_id } = raspberryInfo;
+    if (!socket_id) {
+      throw {
+        statusId: 400,
+        message: 'Raspberry PI is not currently active'
+      };
+    }
+
     const gadgetInfo = (await pool.query(
       `
       SELECT gpio_number, power, status FROM gadget
@@ -75,6 +82,7 @@ router.post('/on', async (req, res) => {
     if (gadgetInfo.status) {
       throw { statusId: 400, message: 'Device is already turned on' };
     }
+
     await pool.query(
       `
       UPDATE gadget
@@ -82,12 +90,19 @@ router.post('/on', async (req, res) => {
         WHERE gadget_id='${gadget_id}'
       `
     );
-    // TODO
+
     // Start a session for that gadget
+    await pool.query(
+      `
+      INSERT INTO session (gadget_id, starting_datetime)
+        VALUES ('${gadget_id}', '${new Date().toUTCString()}')
+      `
+    );
 
     data = {
       gpio: gadgetInfo.gpio_number
     };
+
     on(socket_id, data);
 
     res.json({
@@ -111,15 +126,19 @@ router.post('/off', async (req, res) => {
     )).rows[0];
 
     const { socket_id } = raspberryInfo;
+    if (!socket_id) {
+      throw {
+        statusId: 400,
+        message: 'Raspberry PI is not currently active'
+      };
+    }
     const gadgetInfo = (await pool.query(
       `
       SELECT gpio_number, power, status FROM gadget
         WHERE gadget_id='${gadget_id}'
       `
     )).rows[0];
-    console.log('Socket Id', socket_id);
-    console.log('GadgetInfo');
-    console.log(gadgetInfo);
+
     if (!gadgetInfo.status) {
       throw { statusId: 400, message: 'Device is already off' };
     }
@@ -130,8 +149,14 @@ router.post('/off', async (req, res) => {
         WHERE gadget_id='${gadget_id}'
       `
     );
-    // TODO
-    // Start a session for that gadget
+
+    await pool.query(
+      `
+      UPDATE session
+        SET ending_datetime='${new Date().toUTCString()}'
+        WHERE gadget_id='${gadget_id}' and ending_datetime IS NULL
+      `
+    );
 
     data = {
       gpio: gadgetInfo.gpio_number
@@ -142,7 +167,7 @@ router.post('/off', async (req, res) => {
       msg: 'Device is turned off'
     });
   } catch (err) {
-    res.status(400).json({ message: err.message || err });
+    res.status(err.statusId || 400).json({ message: err.message || err });
   }
 });
 

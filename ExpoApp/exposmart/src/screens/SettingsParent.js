@@ -16,10 +16,15 @@ const AppStacknavigator = createStackNavigator({
 const AppContainer = createAppContainer(AppStacknavigator);
 
 class SettingsParent extends Component {
+  handleNavigation = screenName => {
+    this.props.navigation.navigate(screenName);
+  };
   render() {
     return (
       <View style={styles.container}>
-        <AppContainer />
+        <AppContainer
+          screenProps={{ handleNavigation: this.handleNavigation }}
+        />
       </View>
     );
   }
